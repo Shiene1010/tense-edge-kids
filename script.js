@@ -308,8 +308,8 @@ function renderGraphics() {
 
     // 로켓 메인 바디 벡터 그래픽 그리기
     ctx.fillStyle = '#f1f2f6';
-
     ctx.fillRect(rocket.x + rocket.shake, rocket.y, rocket.width, rocket.height);
+    
     // 로켓 꼬깔콘 머리 그리기
     ctx.fillStyle = '#ff6b81';
     ctx.beginPath();
@@ -317,112 +317,127 @@ function renderGraphics() {
     ctx.lineTo(rocket.x + 20 + rocket.shake, rocket.y - 30);
     ctx.lineTo(rocket.x + rocket.width + rocket.shake, rocket.y);
     ctx.fill();
+
     // Node 2 가능성 조동사: 스위치 주변의 무작위 오파시티 아우라 그리기
     if (state.activeNode === 2) {
-    let pulseOpacity = 0.4 + Math.sin(Date.now() * 0.01) * 0.2;
-    ctx.fillStyle = 'rgba(46, 204, 113, ' + pulseOpacity + ')';
-    ctx.beginPath();
-    ctx.arc(rocket.x + 20, rocket.y + 45, 50, 0, Math.PI * 2);
-    ctx.fill();
+      let pulseOpacity = 0.4 + Math.sin(Date.now() * 0.01) * 0.2;
+      ctx.fillStyle = 'rgba(46, 204, 113, ' + pulseOpacity + ')';
+      ctx.beginPath();
+      ctx.arc(rocket.x + 20, rocket.y + 45, 50, 0, Math.PI * 2);
+      ctx.fill();
     }
-    }
-    }
-    function gameLoop() {
-    updatePhysics();
-    renderGraphics();
-    requestAnimationFrame(gameLoop);
-    }
-    // ==========================================
-    // 6. 상태 제어 및 인터랙션 액션 UI 핸들러
-    // ==========================================
-    function updateUI() {
-    // 전체 스크린 레이어 컨트롤 토글
-    document.getElementById('start-overlay').classList.add('hidden');
-    document.getElementById('menu-layer').classList.add('hidden');
-    document.getElementById('game-layer').classList.add('hidden');
-    if (state.currentScreen === 'start') {
+  }
+}
+
+// 엔진 상태 유지 루프
+function gameLoop() {
+  updatePhysics();
+  renderGraphics();
+  requestAnimationFrame(gameLoop);
+}
+
+// ==========================================
+// 6. 상태 제어 및 인터랙션 액션 UI 핸들러
+// ==========================================
+function updateUI() {
+  document.getElementById('start-overlay').classList.add('hidden');
+  document.getElementById('menu-layer').classList.add('hidden');
+  document.getElementById('game-layer').classList.add('hidden');
+
+  if (state.currentScreen === 'start') {
     document.getElementById('start-overlay').classList.remove('hidden');
-    } else if (state.currentScreen === 'menu') {
+  } else if (state.currentScreen === 'menu') {
     document.getElementById('menu-layer').classList.remove('hidden');
     stopSynthSound();
-    } else if (state.currentScreen === 'game') {
+  } else if (state.currentScreen === 'game') {
     document.getElementById('game-layer').classList.remove('hidden');
+    
     const currentLessonConfig = lessonData[state.activeLesson];
     const currentNodeConfig = currentLessonConfig.nodes[state.activeNode];
+    
     document.getElementById('board-text').innerText = currentNodeConfig.text;
-    }
-    }
-    function triggerCCQ() {
-    state.ccqActive = true;
-    const currentLessonConfig = lessonData[state.activeLesson];
-    const currentNodeConfig = currentLessonConfig.nodes[state.activeNode];
-    document.getElementById('ccq-text').innerText = currentNodeConfig.ccq;
-    document.getElementById('ccq-panel').classList.remove('hidden');
-    }
-    function handleCCQAnswer(userChoice) {
-    if (!state.ccqActive) return;
-    const currentLessonConfig = lessonData[state.activeLesson];
-    const currentNodeConfig = currentLessonConfig.nodes[state.activeNode];
-    if (userChoice === currentNodeConfig.ans) {
-    // 정답 처리 매커니즘
-    playClickSound(880, 0.15); // 경쾌한 정답음 피드백
+  }
+}
+
+function triggerCCQ() {
+  state.ccqActive = true;
+  const currentLessonConfig = lessonData[state.activeLesson];
+  const currentNodeConfig = currentLessonConfig.nodes[state.activeNode];
+
+  document.getElementById('ccq-text').innerText = currentNodeConfig.ccq;
+  document.getElementById('ccq-panel').classList.remove('hidden');
+}
+
+function handleCCQAnswer(userChoice) {
+  if (!state.ccqActive) return;
+
+  const currentLessonConfig = lessonData[state.activeLesson];
+  const currentNodeConfig = currentLessonConfig.nodes[state.activeNode];
+
+  if (userChoice === currentNodeConfig.ans) {
+    playClickSound(880, 0.15);
     document.getElementById('board-text').innerText = "Right! Great job! ⭐";
     document.getElementById('ccq-panel').classList.add('hidden');
     state.ccqActive = false;
-    // 다음 노드 체인 연결
+    
     setTimeout(() => {
-    if (state.activeNode < 3) {
-    state.activeNode++;
-    // 소리 주파수 필터 다시 리셋하여 다음 정황으로 오픈
-    if (filterNode) filterNode.frequency.setValueAtTime(20000, audioCtx.currentTime);
-    updateUI();
-    } else {
-    // 레슨 완료 피드백 후 메뉴 탈출
-    document.getElementById('board-text').innerText = "Adventure Clear! Super! 🏆";
-    setTimeout(() => {
-    state.currentScreen = 'menu';
-    updateUI();
-    }, 2000);
-    }
+      if (state.activeNode < 3) {
+        state.activeNode++;
+        if (filterNode) filterNode.frequency.setValueAtTime(20000, audioCtx.currentTime);
+        updateUI();
+      } else {
+        document.getElementById('board-text').innerText = "Adventure Clear! Super! 🏆";
+        setTimeout(() => {
+          state.currentScreen = 'menu';
+          updateUI();
+        }, 2000);
+      }
     }, 1500);
-    } else {
-    // 오답 피드백의 시각적 결합 유도 원칙
-    playClickSound(220, 0.3); // 무거운 좌절 피드백음
+
+  } else {
+    playClickSound(220, 0.3);
     document.getElementById('board-text').innerText = "Look closely at the screen again! 👀";
-    }
-    }
-    // ==========================================
-    // 7. 브라우저 이벤트 바인딩 및 가동 초기화
-    // ==========================================
-    document.getElementById('btn-start').addEventListener('click', () => {
-    initAudio(); // 오토플레이 제약 완벽 우회 바인딩
-    playClickSound(600, 0.1);
-    state.currentScreen = 'menu';
-    updateUI();
-    });
-    document.querySelectorAll('.btn-menu').forEach(btn => {
-    btn.addEventListener('click', (e) => {
+  }
+}
+
+// ==========================================
+// 7. 브라우저 이벤트 바인딩 및 가동 초기화
+// ==========================================
+document.getElementById('btn-start').addEventListener('click', () => {
+  initAudio();
+  playClickSound(600, 0.1);
+  state.currentScreen = 'menu';
+  updateUI();
+});
+
+document.querySelectorAll('.btn-menu').forEach(btn => {
+  btn.addEventListener('click', (e) => {
     initAudio();
     const targetLesson = parseInt(e.target.getAttribute('data-lesson'));
     state.currentScreen = 'game';
     state.activeLesson = targetLesson;
     state.activeNode = 1;
     state.ccqActive = false;
+    
     document.getElementById('ccq-panel').classList.add('hidden');
     playClickSound(523.25, 0.12);
-    // 테마별 물리 리셋 및 합성음 작동 시작
+
     if (targetLesson === 1) { train.x = -120; startSynthSound('train'); }
     if (targetLesson === 2) { resetToyBlocks(); startSynthSound('toy'); }
     if (targetLesson === 3) { startSynthSound('rocket'); }
+
     updateUI();
-    });
-    });
-    document.getElementById('btn-back').addEventListener('click', () => {
-    playClickSound(400, 0.08);
-    state.currentScreen = 'menu';
-    updateUI();
-    });
-    document.getElementById('ccq-opt-yes').addEventListener('click', () => handleCCQAnswer('yes'));
-    document.getElementById('ccq-opt-no').addEventListener('click', () => handleCCQAnswer('no'));
-    // 루프 구동 시작 (백그라운드에서 실시간 무한 대기 가동)
-    gameLoop();
+  });
+});
+
+document.getElementById('btn-back').addEventListener('click', () => {
+  playClickSound(400, 0.08);
+  state.currentScreen = 'menu';
+  updateUI();
+});
+
+document.getElementById('ccq-opt-yes').addEventListener('click', () => handleCCQAnswer('yes'));
+document.getElementById('ccq-opt-no').addEventListener('click', () => handleCCQAnswer('no'));
+
+// 루프 구동 시작
+gameLoop();

@@ -21,3 +21,17 @@ An interactive web-based educational application designed for native 5-year-old 
 1. Clone this repository to your local machine.
 2. Open `index.html` directly in any modern desktop or mobile web browser.
 3. Tap **"Start Game! 🎉"** to bypass browser autoplay security protocols and initialize the synthesizer.
+
+## 📸 Screenshots
+
+### Start Screen
+![Start screen](images/start.png)
+
+### Adventure 1: Train Platform
+![Train Platform adventure](images/adventure-1.png)
+
+### Adventure 2: Toy Factory
+![Toy Factory adventure](images/adventure-2.png)
+
+### Adventure 3: Rocket Launchpad
+![Rocket Launchpad adventure](images/adventure-3.png)
