@@ -1,0 +1,204 @@
+/* 전체 브라우저 스크롤 및 불필요한 기본 터치 효과 제거 */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+  background-color: #2c3e50;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+/* 모바일 전용 뷰포트 고정형 래퍼 계층 */
+.ui-layer {
+  position: absolute;
+  width: 100%;
+  max-width: 420px;
+  height: 100vh;
+  max-height: 740px;
+  background-color: #f7f9fa;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  padding: 20px;
+  border-radius: 12px;
+}
+
+/* 화면 가시성 제어 유틸리티 */
+.hidden {
+  display: none !important;
+}
+
+/* 카드 및 내비게이션 컨테이너 */
+.card, .menu-container {
+  text-align: center;
+  background: white;
+  padding: 30px 20px;
+  border-radius: 24px;
+  border: 4px solid #e1e8ed;
+  width: 90%;
+}
+
+h1 { font-size: 26px; color: #1e90ff; margin-bottom: 12px; }
+h2 { font-size: 22px; color: #2c3e50; margin-bottom: 20px; }
+p { font-size: 16px; color: #7f8c8d; margin-bottom: 24px; line-height: 1.4; }
+
+/* 5세 친화형 대형 버튼 시스템 */
+.btn-primary {
+  background-color: #2ecc71;
+  color: white;
+  border: none;
+  padding: 16px 32px;
+  font-size: 20px;
+  font-weight: bold;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 6px #27ae60;
+  transition: all 0.1s ease;
+}
+.btn-primary:active {
+  transform: translateY(4px);
+  box-shadow: 0 2px #27ae60;
+}
+
+.btn-secondary {
+  background-color: #7f8c8d;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.menu-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+}
+
+.btn-menu {
+  background-color: #1e90ff;
+  color: white;
+  border: none;
+  padding: 16px;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 16px;
+  cursor: pointer;
+  box-shadow: 0 6px #0072e3;
+  text-align: left;
+  padding-left: 24px;
+}
+.btn-menu:active {
+  transform: translateY(4px);
+  box-shadow: 0 2px #0072e3;
+}
+
+/* 게임 플레이 레이어 전용 스타일 */
+#game-layer {
+  background-color: #1a1a24;
+  justify-content: flex-start;
+  padding-top: 60px;
+}
+
+#btn-back {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+}
+
+/* 고해상도 캔버스 엘리먼트 고정 */
+#gameCanvas {
+  background-color: #2c3e50;
+  border: 4px solid #34495e;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 380px;
+  height: auto;
+  aspect-ratio: 420 / 500;
+}
+
+/* 타겟 표현 안내판 */
+#display-board {
+  width: 100%;
+  max-width: 380px;
+  background-color: #000;
+  border: 3px solid #ffcc00;
+  border-radius: 12px;
+  padding: 12px;
+  margin-top: 14px;
+  text-align: center;
+}
+#board-text {
+  color: #ffcc00;
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0;
+}
+
+/* CCQ 오버레이 팝업 시스템 */
+.ccq-container {
+  position: absolute;
+  bottom: 90px;
+  width: 90%;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  border: 3px solid #ff9f43;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: popUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.ccq-bubble {
+  margin-bottom: 12px;
+}
+#ccq-text {
+  font-size: 18px;
+  color: #2c3e50;
+  font-weight: bold;
+  margin: 0;
+}
+
+.ccq-buttons {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+}
+
+.btn-ccq {
+  flex: 1;
+  border: none;
+  padding: 12px;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 12px;
+  cursor: pointer;
+  color: white;
+}
+.btn-ccq.yes { background-color: #2ecc71; box-shadow: 0 4px #27ae60; }
+.btn-ccq.no { background-color: #e74c3c; box-shadow: 0 4px #c0392b; }
+.btn-ccq:active { transform: translateY(2px); box-shadow: 0 2px rgba(0,0,0,0.2); }
+
+/* 애니메이션 키프레임 */
+@keyframes popUp {
+  from { transform: translateY(30px) scale(0.9); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
