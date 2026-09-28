@@ -1,58 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Tense Edge Kids Playground</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <!-- 1. 오토플레이 보안 정책 우회용 터치 시작 레이어 -->
-  <div id="start-overlay" class="ui-layer">
-    <div class="card">
-      <h1>Let's Play with Time! 🚀</h1>
-      <p>Tap the big button to start our magical English journey!</p>
-      <button id="btn-start" class="btn-primary">Start Game! 🎉</button>
-    </div>
-  </div>
+# Lesson 3 Planning Specification: Space Rocket Launchpad
 
-  <!-- 2. 레슨 선택 내비게이션 레이어 (기본 비활성화, 시작 후 노출) -->
-  <div id="menu-layer" class="ui-layer hidden">
-    <div class="menu-container">
-      <h2>Choose Your Adventure! ⭐</h2>
-      <div class="menu-grid">
-        <button class="btn-menu" data-lesson="1">🚉 Train Platform</button>
-        <button class="btn-menu" data-lesson="2">🧸 Toy Factory</button>
-        <button class="btn-menu" data-lesson="3">🚀 Rocket Launchpad</button>
-      </div>
-    </div>
-  </div>
+## 🎯 1. Linguistic Target & Cognitive Mapping
+- **Linguistic Focus:** Epistemic Modality & Psychological Distance (확신조동사의 물리적 강도와 추측조동사의 공간적 거리감 대조).
+- **Spatial Concept:** Heavy focal vibration (Extreme Proximity) shifting into geometric expansion (Aura & Possibility).
 
-  <!-- 3. 실시간 프레임 렌더링용 핵심 캔버스 및 CCQ UI 결합 레이어 -->
-  <div id="game-layer" class="ui-layer hidden">
-    <!-- 뒤로가기 버튼 -->
-    <button id="btn-back" class="btn-secondary">🏠 Menu</button>
-    
-    <!-- 모든 그래픽이 실시간으로 그려지는 단일 캔버스 -->
-    <canvas id="gameCanvas" width="420" height="500"></canvas>
+## 🚀 2. Node-by-Node Interaction Scenario
 
-    <!-- 5세 아동용 이진 CCQ 팝업 패널 -->
-    <div id="ccq-panel" class="ccq-container hidden">
-      <div class="ccq-bubble">
-        <p id="ccq-text">Is the train all gone? 🤔</p>
-      </div>
-      <div class="ccq-buttons">
-        <button id="ccq-opt-yes" class="btn-ccq yes">Yes! 👍</button>
-        <button id="ccq-opt-no" class="btn-ccq no">No! 👎</button>
-      </div>
-    </div>
+### Node 1: Absolute Certainty (Strong Modality)
+- **Target String:** "The rocket is getting super hot right now!"
+- **Visual Presentation:** A large rocket body object sits on the launchpad. The booster engine flame radius scales randomly (`Math.random()`) every single frame. The entire rocket coordinate fluctuates violently via `Math.sin(Date.now() * 0.08) * 4` to display intense physical strain and immediate presence.
+- **Audio Feedback:** A heavy, raw 45Hz square-wave engine rumble circuit running at full gain.
+- **CCQ Check:** "Is the rocket really hot right now? 🔥" (Answer: YES). Connects progressive assertion with hard, tactile, vibrating reality.
 
-    <!-- 타겟 표현 및 피드백 전광판 UI -->
-    <div id="display-board">
-      <p id="board-text">Loading adventure...</p>
-    </div>
-  </div>
+### Node 2: Epistemic Possibility (Weak Modality)
+- **Target String:** "It might zoom to the moon if we press this!"
+- **Visual Presentation:** The violent structural shaking completely stops. The rocket stays still, but a soft green circular glow (Aura) appears around the launch trigger switch, gently oscillating between 40% and 80% opacity. This visually shifts the focus from physical crisis to mental hypothesis.
+- **Audio Feedback:** The low rumble smoothly morphs into an ethereal, sweeping outer-space filter sweep ranging up to 1200Hz.
+- **CCQ Check:** "Did it fly to the moon yet? 🌙" (Answer: NO). Teaches that "might" implies a mental path or choice toward the future, not an accomplished fact.
 
-  <script src="script.js"></script>
-</body>
-</html>
+### Node 3: Completed Adventure Closure
+- **Target String:** "Wow! Look at the big space field!"
+- **Visual Presentation:** Clear starry canvas environment. Celebratory confirmation overlay text displayed.
+- **Audio Feedback:** Soft harmonic sine tones pulsing smoothly.
+- **CCQ Check:** "Adventure is all complete? 🎉" (Answer: YES). Full curriculum sequence resolution.
